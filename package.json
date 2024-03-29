@@ -2,7 +2,7 @@
   "name": "pts-app",
   "version": "0.0.1",
   "scripts": {
-    "build": "npx webpack --mode production"
+    "build": "npx webpack"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",

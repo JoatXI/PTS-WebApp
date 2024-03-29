@@ -1,18 +1,12 @@
 import React from "react";
-import LocationSearch from "./LocationSearch";
+import Displayer from "./Displayer";
+import LocationSearch  from "./LocationSearch";
 
-function App({}) {
+function App({defaultLocation}) {
     const [location, setLocation] = React.useState("");
     const [accomodations, setAccommodation] = React.useState([]);
 
-    const resultHtml = accomodations.map( currElement => <li key={currElement.id}>Name: {currElement.name}, Accommodation Type: {currElement.type}, Accommodation Location: {currElement.latitude}, {currElement.longitude}</li>);
-
-    function updateLocation(location) {
-        const foundLocation = location
-        setLocation(foundLocation);
-
-        ajaxSearch(foundLocation);
-    }
+    const resultHtml = accomodations.map( currAccom => <li key={currAccom.id}>Name: {currAccom.name}, Accommodation Type: {currAccom.type}, Accommodation Location: {currAccom.latitude}, {currAccom.longitude}</li>);
 
     return (
         <div>
@@ -20,14 +14,21 @@ function App({}) {
             <Displayer accomodations={resultHtml} />
         </div>
     );
+    
+    function updateLocation(location) {
+        const foundLocation = location
+        setLocation(foundLocation);
+
+        ajaxSearch(foundLocation);
+    }
 
     async function ajaxSearch(location) {
         try {
             const response = await fetch(`/location/${location}`);
 
-            const data = await response.json();
+            const locationList = await response.json();
 
-            setAccommodation(data);
+            setAccommodation(locationList);
 
         } catch (error) {
             alert(`Error occured: ${error.message}`);

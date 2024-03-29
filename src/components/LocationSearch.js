@@ -1,10 +1,10 @@
 import React from "react";
 
-function LocationSearch({location, passBackLocation}) {
+function LocationSearch({searchResult}) {
 
     function updateLocation() {
         const inputName = document.getElementById("location").value;
-        passBackLocation(inputName);
+        searchResult(inputName);
     }
 
     return (
