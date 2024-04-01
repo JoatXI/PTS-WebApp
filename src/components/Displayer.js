@@ -1,10 +1,10 @@
 import React from "react";
 
-function Displayer({accom}) {
+function Displayer() {
     
     return (
-        <div>
-            {accom}
+        <div id="results">
+            
         </div>
     );
 }
