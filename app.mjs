@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 app.get('/location/:location', (req, res) => {
     try {
-        const stmt = db.prepare('SELECT * FROM accomodation WHERE location =?');
+        const stmt = db.prepare('SELECT * FROM accommodation WHERE location =?');
         const results = stmt.all(req.params.location);
         res.json(results);
     } catch (error) {
@@ -24,7 +24,7 @@ app.get('/location/:location', (req, res) => {
 
 app.get('/typelocation/:type/:location', (req, res) => {
     try {
-        const stmt = db.prepare('SELECT * FROM accomodation WHERE type =? AND location =?');
+        const stmt = db.prepare('SELECT * FROM accommodation WHERE type =? AND location =?');
         const results = stmt.all(req.params.type, req.params.location);
         res.json(results);
     } catch (error) {

@@ -1,10 +1,10 @@
 import React from "react";
 
-function Displayer({accommodation}) {
+function Displayer({accom}) {
     
     return (
         <div>
-            {accommodation}
+            {accom}
         </div>
     );
 }

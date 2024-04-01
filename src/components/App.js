@@ -4,34 +4,34 @@ import LocationSearch  from "./LocationSearch";
 
 function App({defaultLocation}) {
     const [location, setLocation] = React.useState("");
-    const [accomodations, setAccommodation] = React.useState([]);
+    const [accom, setAccommodation] = React.useState([]);
 
-    const resultHtml = accomodations.map( currAccom => <li key={currAccom.id}>Name: {currAccom.name}, Accommodation Type: {currAccom.type}, Accommodation Location: {currAccom.latitude}, {currAccom.longitude}</li>);
+    const accomHtml = accom.map( currAccom => <li key={currAccom.ID}>Name: {currAccom.name}, Accommodation Type: {currAccom.type}, Accommodation Location: {currAccom.latitude}, {currAccom.longitude}</li>);
 
     return (
         <div>
-            <LocationSearch searchResult={updateLocation} />
-            <Displayer accomodations={resultHtml} />
+            <LocationSearch searchResult={updateLocation} location={location} />
+            <Displayer accom={accomHtml} />
         </div>
     );
     
-    function updateLocation(location) {
-        const foundLocation = location
+    function updateLocation(currLocation) {
+        const foundLocation = currLocation
         setLocation(foundLocation);
 
         ajaxSearch(foundLocation);
     }
 
-    async function ajaxSearch(location) {
+    async function ajaxSearch(locationName) {
         try {
-            const response = await fetch(`/location/${location}`);
+            const response = await fetch(`/location/${locationName}`);
 
             const locationList = await response.json();
 
             setAccommodation(locationList);
 
-        } catch (error) {
-            alert(`Error occured: ${error.message}`);
+        } catch (e) {
+            alert(`Error occured: ${e.message}`);
         }
     }
 }
