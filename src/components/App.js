@@ -5,13 +5,20 @@ import LocationSearch  from "./LocationSearch";
 function App() {
     const [location, setLocation] = React.useState("");
     const [accom, setAccommodation] = React.useState([]);
+    const [lat, setLat] = React.useState(0);
+    const [lon, setLon] = React.useState(0);
 
-    //const accomHtml = accom.map( currAccom => <li key={currAccom.ID}>Name: {currAccom.name}, Accommodation Type: {currAccom.type}, Accommodation Location: {currAccom.latitude}, {currAccom.longitude}</li>);
+    const coord1 = accom.map( currAccom => <p key={currAccom.ID}>{currAccom.latitude}</p>);
+    const coord2 = accom.map( currAccom => <p key={currAccom.ID}>{currAccom.longitude}</p>);
+    const accomHtml = accom.map( currAccom => <p key={currAccom.ID}>{currAccom.name} {currAccom.description}</p>);
+
+    setLat(coord1);
+    setLon(coord2);
 
     return (
         <div>
             <LocationSearch searchResult={updateLocation} location={location} />
-            <Displayer />
+            <Displayer lat={lat} lon={lon} accom={accomHtml}/>
         </div>
     );
     
@@ -27,6 +34,8 @@ function App() {
             const response = await fetch(`/location/${locationName}`);
 
             const locationList = await response.json();
+            
+            setAccommodation(locationList);
 
             locationList.forEach(location => {
                 const node1 = document.createElement("p");
@@ -53,8 +62,6 @@ function App() {
                 document.getElementById("results").appendChild(bookBtn);
             });
 
-            //setAccommodation(locationList)
-
         } catch (e) {
             alert(`Error occured: ${e.message}`);
         }
@@ -79,9 +86,9 @@ function App() {
             if(response.status == 404) {
                 alert("Sorry, that accommodation is not available.");
             } else if(response.status == 400) {
-                alert("Invalid booking!! You must provide an Accommodation ID, number of people booking and the booking date to be able to book.")
+                alert("Invalid booking!! You must provide an Accommodation ID, number of people booking and the booking date to be able to book.");
             } else {
-                alert("Accommodation booked successfully")
+                alert("Accommodation booked successfully");
             }
 
         } catch (e) {
