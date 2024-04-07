@@ -3,22 +3,17 @@ import Displayer from "./Displayer";
 import LocationSearch  from "./LocationSearch";
 
 function App() {
+    const map = React.useRef(null);
     const [location, setLocation] = React.useState("");
-    const [accom, setAccommodation] = React.useState([]);
-    const [lat, setLat] = React.useState(0);
-    const [lon, setLon] = React.useState(0);
-
-    const coord1 = accom.map( currAccom => <p key={currAccom.ID}>{currAccom.latitude}</p>);
-    const coord2 = accom.map( currAccom => <p key={currAccom.ID}>{currAccom.longitude}</p>);
-    const accomHtml = accom.map( currAccom => <p key={currAccom.ID}>{currAccom.name} {currAccom.description}</p>);
-
-    setLat(coord1);
-    setLon(coord2);
+    //const [accom, setAccommodation] = React.useState([]);
+    const [lat, setLat] = React.useState([]);
+    const [lon, setLon] = React.useState([]);
+    const [info, setInfo] = React.useState([]);
 
     return (
         <div>
-            <LocationSearch searchResult={updateLocation} location={location} />
-            <Displayer lat={lat} lon={lon} accom={accomHtml}/>
+            <LocationSearch searchResult={updateLocation} lat={lat} lon={lon} info={info} />
+            <Displayer />
         </div>
     );
     
@@ -35,13 +30,22 @@ function App() {
 
             const locationList = await response.json();
             
-            setAccommodation(locationList);
+            //setAccommodation(locationList);
 
             locationList.forEach(location => {
                 const node1 = document.createElement("p");
                 const textNode = document.createTextNode(`ID: ${location.ID},  Name: ${location.name},  Accommodation Type: ${location.type},  Location: ${location.latitude}, ${location.longitude}`);
                 
                 node1.appendChild(textNode);
+
+                // setting accommodation coordinates and description
+                const coord1 = document.createTextNode(`${location.latitude}`);
+                const coord2 = document.createTextNode(`${location.longitude}`);
+                const desc = document.createTextNode(`${location.description}`);
+
+                setLat(coord1);
+                setLon(coord2);
+                setInfo(desc);
                 
                 // creates the book button
                 const bookBtn = document.createElement("input");
@@ -66,6 +70,8 @@ function App() {
             alert(`Error occured: ${e.message}`);
         }
     }
+
+    
 
     async function ajaxBook(bookLocation) {
         try {
