@@ -1,15 +1,12 @@
 import React from "react";
-import "leaflet";
 
 function Displayer() {
     
     return (
-        <div className="wrapper">
+        <div className="view">
             <div id="results">
                 
             </div>
-
-            <div id="map1" style={{width:"800px", height:"600px"}}></div>
         </div>
     );
 }

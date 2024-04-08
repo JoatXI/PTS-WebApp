@@ -1,19 +1,26 @@
 import React from "react";
 import Displayer from "./Displayer";
 import LocationSearch  from "./LocationSearch";
+import LeafletMap from "./Map";
+import Logout from "./Logout";
+import Login from "./Login";
 
 function App() {
-    const map = React.useRef(null);
     const [location, setLocation] = React.useState("");
-    //const [accom, setAccommodation] = React.useState([]);
-    const [lat, setLat] = React.useState([]);
-    const [lon, setLon] = React.useState([]);
-    const [info, setInfo] = React.useState([]);
+    const [login, setLogin] = React.useState("");
+    const [lat, setLat] = React.useState(0);
+    const [lon, setLon] = React.useState(0);
+    const [info, setDesc] = React.useState("");
+    checkLogin();
 
     return (
         <div>
-            <LocationSearch searchResult={updateLocation} lat={lat} lon={lon} info={info} />
+            <div id="session-result"></div>
+            <Logout logoutResult={logoutSession} />
+            <Login loginResult={loginSession} />
+            <LocationSearch searchResult={updateLocation} />
             <Displayer />
+            <LeafletMap />
         </div>
     );
     
@@ -22,6 +29,17 @@ function App() {
         setLocation(foundLocation);
 
         ajaxSearch(foundLocation);
+    }
+
+    function logoutSession() {
+        ajaxLogout();
+    }
+
+    function loginSession(loginDetails) {
+        const foundUser = loginDetails
+        setLogin(foundUser);
+
+        ajaxLogin(foundUser);
     }
 
     async function ajaxSearch(locationName) {
@@ -91,6 +109,8 @@ function App() {
 
             if(response.status == 404) {
                 alert("Sorry, that accommodation is not available.");
+            } else if(response.status == 401) {
+                alert("User Not Logged in!! User must be logged in to Book.");
             } else if(response.status == 400) {
                 alert("Invalid booking!! You must provide an Accommodation ID, number of people booking and the booking date to be able to book.");
             } else {
@@ -99,6 +119,84 @@ function App() {
 
         } catch (e) {
             alert(`Error occured: ${e.message}`);
+        }
+    }
+
+    async function checkLogin() {
+        // ask the server whether the user is logged in (GET /login)
+        // query the object returned by the server to see if the username is null or not null
+        // if null, display login form
+        // if not null, display search artist form
+        try {
+            const res = await fetch('/login');
+    
+            const userSessions = await res.json();
+
+            if (userSessions.username == null) {
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('accommodation-search').style.display = 'none';
+                document.getElementById('logout').style.display = 'none';
+                document.getElementById("map1").style.display = "none";
+            } else if (userSessions.username != null) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('accommodation-search').style.display = 'flex';
+                document.getElementById('logout').style.display = 'flex';
+                document.getElementById("map1").style.display = "flex";
+            }
+    
+        } catch (e) {
+            alert(`Error occured: ${e}`);
+        }
+    }
+
+    async function ajaxLogin(details) {
+        try {
+            const res = await fetch(`/login`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(details)
+            });
+    
+            if (res.status == 401) {
+                alert('Invalid login details');
+            } else if (res.status == 200) {
+                alert(`Logged in as ${details.username}`);
+                document.getElementById("logout").style.display = "flex";
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('accommodation-search').style.display = 'flex';
+                document.getElementById("map1").style.display = "flex";
+
+                const node = document.createElement("p");
+                const loginText = document.createTextNode(`Logged in as ${details.username}`);
+
+                node.appendChild(loginText);
+                document.getElementById("session-result").appendChild(node);
+            }
+    
+        } catch (e) {
+            alert(`An error occurred while logging in ${e}`);
+        }
+    }
+
+    async function ajaxLogout() {
+        try {
+            const res = await fetch(`/logout`, {
+                method: 'POST'
+            });
+    
+            if(res.status == 200) {
+                alert("You have been logged out");
+                document.getElementById("login-form").style.display = "block";
+                document.getElementById("logout").style.display = "none";
+                document.getElementById("accommodation-search").style.display = "none";
+                document.getElementById("results").style.display = "none";
+                document.getElementById("map1").style.display = "none";
+            }
+    
+        } catch (e) {
+            alert(`Error occured: ${e}`);
         }
     }
 }
