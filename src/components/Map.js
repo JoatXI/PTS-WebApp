@@ -1,32 +1,30 @@
 import React from 'react';
 import "leaflet";
 
-function LeafletMap({lat1, lon1, info1}) {
+function LeafletMap({ location }) {
     const map = React.useRef(null);
-    const [lat, setLat] = React.useState(lat1 || 51.05);
-    const [lon, setLon] = React.useState(lon1 || -0.72);
-    const [info, setDesc] = React.useState(info1);
 
     React.useEffect( () => {
-        map.current = L.map("map1");
+        map.current = L.map("map");
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { attribution: "Copyright OSM contributors, ODBL" } ).addTo(map.current);
-
-        const pos = [lat, lon];
-        map.current.setView(pos, 14);
-
-        const mark = L.marker(pos).addTo(map.current);
-
-        map.current.on("click", e => {
-            const text = prompt(info);
-
-            mark.bindPopup(text);
+        
+        location.forEach(latLon => {
+            L.marker([latLon.latitude, latLon.longitude]).addTo(map.current).bindPopup(`${latLon.name}, ${latLon.type}<br><br>${latLon.description}`);
+            map.current.setView([latLon.latitude, latLon.longitude], 10);
         });
-    },[]);
+        
+        //map.current.setView([51.05, -0.72], 14);
+        
+        return () => {
+            map.current.remove();
+        }
+
+    }, [location]);
 
     return (
-        <div id="map1" style={{width:"800px", height:"600px"}}>
+        <div id="map" style={{width:"800px", height:"600px"}}>
 
         </div>
     )

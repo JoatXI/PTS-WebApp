@@ -6,29 +6,23 @@ import Logout from "./Logout";
 import Login from "./Login";
 
 function App() {
-    const [location, setLocation] = React.useState("");
+    const [location, setLocation] = React.useState([]);
     const [login, setLogin] = React.useState("");
-    const [lat, setLat] = React.useState(0);
-    const [lon, setLon] = React.useState(0);
-    const [info, setDesc] = React.useState("");
     checkLogin();
 
     return (
-        <div>
+        <div className="content">
             <div id="session-result"></div>
             <Logout logoutResult={logoutSession} />
             <Login loginResult={loginSession} />
             <LocationSearch searchResult={updateLocation} />
             <Displayer />
-            <LeafletMap />
+            <LeafletMap location={location}/>
         </div>
     );
     
     function updateLocation(currLocation) {
-        const foundLocation = currLocation
-        setLocation(foundLocation);
-
-        ajaxSearch(foundLocation);
+        ajaxSearch(currLocation);
     }
 
     function logoutSession() {
@@ -36,10 +30,9 @@ function App() {
     }
 
     function loginSession(loginDetails) {
-        const foundUser = loginDetails
-        setLogin(foundUser);
+        setLogin(loginDetails);
 
-        ajaxLogin(foundUser);
+        ajaxLogin(loginDetails);
     }
 
     async function ajaxSearch(locationName) {
@@ -47,23 +40,14 @@ function App() {
             const response = await fetch(`/location/${locationName}`);
 
             const locationList = await response.json();
-            
-            //setAccommodation(locationList);
+
+            setLocation(locationList);
 
             locationList.forEach(location => {
                 const node1 = document.createElement("p");
                 const textNode = document.createTextNode(`ID: ${location.ID},  Name: ${location.name},  Accommodation Type: ${location.type},  Location: ${location.latitude}, ${location.longitude}`);
                 
                 node1.appendChild(textNode);
-
-                // setting accommodation coordinates and description
-                const coord1 = document.createTextNode(`${location.latitude}`);
-                const coord2 = document.createTextNode(`${location.longitude}`);
-                const desc = document.createTextNode(`${location.description}`);
-
-                setLat(coord1);
-                setLon(coord2);
-                setInfo(desc);
                 
                 // creates the book button
                 const bookBtn = document.createElement("input");
@@ -136,12 +120,12 @@ function App() {
                 document.getElementById('login-form').style.display = 'block';
                 document.getElementById('accommodation-search').style.display = 'none';
                 document.getElementById('logout').style.display = 'none';
-                document.getElementById("map1").style.display = "none";
+                document.getElementById("map").style.display = "none";
             } else if (userSessions.username != null) {
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('accommodation-search').style.display = 'flex';
                 document.getElementById('logout').style.display = 'flex';
-                document.getElementById("map1").style.display = "flex";
+                document.getElementById("map").style.display = "flex";
             }
     
         } catch (e) {
@@ -166,7 +150,7 @@ function App() {
                 document.getElementById("logout").style.display = "flex";
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('accommodation-search').style.display = 'flex';
-                document.getElementById("map1").style.display = "flex";
+                document.getElementById("map").style.display = "flex";
 
                 const node = document.createElement("p");
                 const loginText = document.createTextNode(`Logged in as ${details.username}`);
@@ -192,7 +176,7 @@ function App() {
                 document.getElementById("logout").style.display = "none";
                 document.getElementById("accommodation-search").style.display = "none";
                 document.getElementById("results").style.display = "none";
-                document.getElementById("map1").style.display = "none";
+                document.getElementById("map").style.display = "none";
             }
     
         } catch (e) {
