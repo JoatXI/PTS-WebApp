@@ -3,7 +3,6 @@ import Database from 'better-sqlite3';
 import betterSqlite3Session from 'express-session-better-sqlite3';
 import expressSession from 'express-session';
 import * as crypto from 'crypto';
-import { error } from 'console';
 
 const app = express();
 const db = new Database('placestostay.db');
@@ -122,10 +121,12 @@ app.get('/typelocation/:type/:location', (req, res) => {
 app.post('/idnpeoplethedate/book', (req, res) => {
     try {
         
-        if(req.body.accID == "" || req.body.thedate== "" || req.body.npeople == "") {
-            res.status(400).json({error: "Error invalid booking! Input data is empty"});
-        } else if (req.session.username == null) {
+        if (req.session.username == null) {
             res.status(401).json({ error: "You're not logged in. Go away!"});
+        } else if(req.body.accID == "" || req.body.thedate== "" || req.body.npeople == "") {
+            res.status(400).json({error: "Error invalid booking! Input data is empty"});
+        } else if (req.body.npeople > 1 || req.body.thedate < 240601 || req.body.thedate > 240603) {
+            res.status(400).json({ error: "Accommodation not available!"});
         } else {
             const stmt = db.prepare('INSERT INTO acc_bookings (accID, thedate, npeople) VALUES (?,?,?)');
             const info = stmt.run(req.body.accID, req.body.thedate, req.body.npeople);

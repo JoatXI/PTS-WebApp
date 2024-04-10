@@ -12,7 +12,6 @@ function App() {
 
     return (
         <div className="content">
-            <div id="session-result"></div>
             <Logout logoutResult={logoutSession} />
             <Login loginResult={loginSession} />
             <LocationSearch searchResult={updateLocation} />
@@ -96,7 +95,7 @@ function App() {
             } else if(response.status == 401) {
                 alert("User Not Logged in!! User must be logged in to Book.");
             } else if(response.status == 400) {
-                alert("Invalid booking!! You must provide an Accommodation ID, number of people booking and the booking date to be able to book.");
+                alert("Invalid booking! Input data is empty or Accommodation not available!");
             } else {
                 alert("Accommodation booked successfully");
             }
