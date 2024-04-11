@@ -16,7 +16,7 @@ function App() {
             <Login loginResult={loginSession} />
             <LocationSearch searchResult={updateLocation} />
             <Displayer />
-            <LeafletMap location={location}/>
+            <LeafletMap booking={bookAccommodation} location={location}/>
         </div>
     );
     
@@ -34,6 +34,10 @@ function App() {
         ajaxLogin(loginDetails);
     }
 
+    function bookAccommodation(bookingDetails) {
+        ajaxBook(bookingDetails);
+    }
+
     async function ajaxSearch(locationName) {
         try {
             const response = await fetch(`/location/${locationName}`);
@@ -48,23 +52,23 @@ function App() {
                 
                 node1.appendChild(textNode);
                 
-                // creates the book button
+                /* creates the book button
                 const bookBtn = document.createElement("input");
                 bookBtn.setAttribute("type", "button");
                 bookBtn.setAttribute("value", "Book");
                 
                 //const textField = document.createElement("input");
-                //textField.setAttribute("id", `npeople${location.id}`);
+                //textField.setAttribute("id", `npeople${location.id}`);*/
                 
                 // Adding the new node to the <div id="results">
                 document.getElementById("results").appendChild(node1);
                 
                 //node1.appendChild(textField);
                 
-                // creates a "book" button event handler
+                /* creates a "book" button event handler
                 bookBtn.addEventListener('click', ajaxBook.bind(this, location));
                 
-                document.getElementById("results").appendChild(bookBtn);
+                document.getElementById("results").appendChild(bookBtn);*/
             });
 
         } catch (e) {
@@ -72,22 +76,15 @@ function App() {
         }
     }
 
-    
-
-    async function ajaxBook(bookLocation) {
+    async function ajaxBook(bookingDetails) {
         try {
-            const booking = {
-                accID: bookLocation.ID,
-                npeople: 1,
-                thedate: 240601
-            }
 
             const response = await fetch(`/idnpeoplethedate/book`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(booking)
+                body: JSON.stringify(bookingDetails)
             });
 
             if (response.status == 406) {
