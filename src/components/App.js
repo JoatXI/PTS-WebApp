@@ -90,12 +90,14 @@ function App() {
                 body: JSON.stringify(booking)
             });
 
-            if(response.status == 404) {
-                alert("Sorry, that accommodation is not available.");
+            if (response.status == 406) {
+                ("Error invalid booking! Input data not acceptable");
+            } else if(response.status == 404) {
+                alert("No availability found for the chosen date.");
             } else if(response.status == 401) {
                 alert("User Not Logged in!! User must be logged in to Book.");
             } else if(response.status == 400) {
-                alert("Invalid booking! Input data is empty or Accommodation not available!");
+                alert("Not enough availability for the specified number of people.");
             } else {
                 alert("Accommodation booked successfully");
             }
