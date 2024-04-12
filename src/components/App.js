@@ -40,36 +40,12 @@ function App() {
 
     async function ajaxSearch(locationName) {
         try {
-            const response = await fetch(`/location/${locationName}`);
+            const response = await fetch(`/locations/location/${locationName}`);
 
             const locationList = await response.json();
 
+            // saves the searched results in state which is then passed to the Map component
             setLocation(locationList);
-
-            locationList.forEach(location => {
-                const node1 = document.createElement("p");
-                const textNode = document.createTextNode(`ID: ${location.ID},  Name: ${location.name},  Accommodation Type: ${location.type},  Location: ${location.latitude}, ${location.longitude}`);
-                
-                node1.appendChild(textNode);
-                
-                /* creates the book button
-                const bookBtn = document.createElement("input");
-                bookBtn.setAttribute("type", "button");
-                bookBtn.setAttribute("value", "Book");
-                
-                //const textField = document.createElement("input");
-                //textField.setAttribute("id", `npeople${location.id}`);*/
-                
-                // Adding the new node to the <div id="results">
-                document.getElementById("results").appendChild(node1);
-                
-                //node1.appendChild(textField);
-                
-                /* creates a "book" button event handler
-                bookBtn.addEventListener('click', ajaxBook.bind(this, location));
-                
-                document.getElementById("results").appendChild(bookBtn);*/
-            });
 
         } catch (e) {
             alert(`Error occured: ${e.message}`);
@@ -79,7 +55,7 @@ function App() {
     async function ajaxBook(bookingDetails) {
         try {
 
-            const response = await fetch(`/idnpeoplethedate/book`, {
+            const response = await fetch(`/locations/idnpeoplethedate/book`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -110,7 +86,7 @@ function App() {
         // if null, display login form
         // if not null, display search artist form
         try {
-            const res = await fetch('/login');
+            const res = await fetch('/users/login');
     
             const userSessions = await res.json();
 
@@ -133,7 +109,7 @@ function App() {
 
     async function ajaxLogin(details) {
         try {
-            const res = await fetch(`/login`, {
+            const res = await fetch(`/users/login`, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -164,7 +140,7 @@ function App() {
 
     async function ajaxLogout() {
         try {
-            const res = await fetch(`/logout`, {
+            const res = await fetch(`/users/logout`, {
                 method: 'POST'
             });
     
