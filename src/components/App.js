@@ -91,7 +91,7 @@ function App() {
             const userSessions = await res.json();
 
             if (userSessions.username == null) {
-                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('login-form').style.display = 'flex';
                 document.getElementById('accommodation-search').style.display = 'none';
                 document.getElementById('logout').style.display = 'none';
                 document.getElementById("map").style.display = "none";
@@ -121,8 +121,8 @@ function App() {
                 alert('Invalid login details');
             } else if (res.status == 200) {
                 alert(`Logged in as ${details.username}`);
-                document.getElementById("logout").style.display = "flex";
                 document.getElementById('login-form').style.display = 'none';
+                document.getElementById("logout").style.display = "flex";
                 document.getElementById('accommodation-search').style.display = 'flex';
                 document.getElementById("map").style.display = "flex";
 
