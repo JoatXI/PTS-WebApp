@@ -54,15 +54,7 @@ app.use('/users', usersRouter);
 
 app.use('/locations', locationRouter);
 
-/*
-app.use((req, res, next) => {
-	console.log("Session is");
-	console.log(req.session);
-	next();
-})
-*/
-
-app.use(corsMiddleware)
+app.use(corsMiddleware);
 
 app.get('/', (req, res) => {
     res.send("PTS Application Assessment");

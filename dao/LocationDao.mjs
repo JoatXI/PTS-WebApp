@@ -9,13 +9,9 @@ class LocationDao {
     findLocationByName(location) {
         const stmt = this.db.prepare(`SELECT * FROM ${this.table} WHERE location = ?`);
         const result = stmt.all(location);
-        if (result.length == 0) {
-            return null;
-        } else {
-            return result;
-        }
+        return result;
     }
-
+    
     bookLocation(accID, thedate, npeople) {
         const availableStmt = this.db.prepare(`SELECT availability, thedate FROM ${this.table2} WHERE accID = ? AND thedate = ?`);
         const availableInfo = availableStmt.get(accID, thedate);

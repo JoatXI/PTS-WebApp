@@ -7,12 +7,10 @@ class LocationController {
 
     findLocationByName(req, res) {
         try {
-            const location = this.dao.findLocationByName(req.body.location);
-            if (location == null) {
-                res.status(401).json({ error: "Invalid location!" });
-            } else {
-                res.json(location);
-            }
+            const location = this.dao.findLocationByName(req.params.location);
+            
+            res.json(location);
+
         } catch (e) {
             res.status(500).json({ error: e });
         }

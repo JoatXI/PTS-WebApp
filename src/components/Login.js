@@ -11,7 +11,7 @@ function Login({loginResult}) {
     }
 
     return (
-        <div className="wrapper" id="login-form">
+        <div className="wrapper">
             <form method="post">
                 <h1>Login</h1>
                 <div className="input-box">

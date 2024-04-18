@@ -11,6 +11,7 @@ class UserController {
             if(user == null) {
                 res.status(401).json({ error: "Invalid username or password!"});
             } else {
+                req.session.username = user.username;
                 res.json(user);
             }
         } catch (e) {

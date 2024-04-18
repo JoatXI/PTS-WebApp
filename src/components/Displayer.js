@@ -1,12 +1,10 @@
 import React from "react";
 
-function Displayer() {
-    
+function Displayer({ login }) {
+
     return (
         <div className="view">
-            <div id="results">
-                
-            </div>
+            <h2>Logged in as: {login}</h2>
         </div>
     );
 }

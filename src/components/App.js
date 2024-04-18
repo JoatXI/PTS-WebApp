@@ -7,18 +7,28 @@ import Login from "./Login";
 
 function App() {
     const [location, setLocation] = React.useState([]);
-    const [login, setLogin] = React.useState("");
-    checkLogin();
+    const [login, setLogin] = React.useState(null);
+    
+    React.useEffect(() => {
+        checkLogin();
+    }, []);
 
-    return (
-        <div className="content">
-            <Logout logoutResult={logoutSession} />
-            <Login loginResult={loginSession} />
-            <LocationSearch searchResult={updateLocation} />
-            <Displayer />
-            <LeafletMap booking={bookAccommodation} location={location}/>
-        </div>
-    );
+    if(login != null) {
+        return (
+            <div className="content">
+                <Logout logoutResult={logoutSession} />
+                <Displayer login={login}/>
+                <LocationSearch searchResult={updateLocation} />
+                <LeafletMap booking={bookAccommodation} location={location} />
+            </div>
+        );
+    } else {
+        return (
+            <div className="content">
+                <Login loginResult={loginSession} />
+            </div>
+        );
+    }
     
     function updateLocation(currLocation) {
         ajaxSearch(currLocation);
@@ -29,8 +39,6 @@ function App() {
     }
 
     function loginSession(loginDetails) {
-        setLogin(loginDetails);
-
         ajaxLogin(loginDetails);
     }
 
@@ -54,7 +62,6 @@ function App() {
 
     async function ajaxBook(bookingDetails) {
         try {
-
             const response = await fetch(`/locations/idnpeoplethedate/book`, {
                 method: "POST",
                 headers: {
@@ -90,17 +97,7 @@ function App() {
     
             const userSessions = await res.json();
 
-            if (userSessions.username == null) {
-                document.getElementById('login-form').style.display = 'flex';
-                document.getElementById('accommodation-search').style.display = 'none';
-                document.getElementById('logout').style.display = 'none';
-                document.getElementById("map").style.display = "none";
-            } else if (userSessions.username != null) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('accommodation-search').style.display = 'flex';
-                document.getElementById('logout').style.display = 'flex';
-                document.getElementById("map").style.display = "flex";
-            }
+            setLogin(userSessions.username)
     
         } catch (e) {
             alert(`Error occured: ${e}`);
@@ -120,17 +117,8 @@ function App() {
             if (res.status == 401) {
                 alert('Invalid login details');
             } else if (res.status == 200) {
+                setLogin(details.username);
                 alert(`Logged in as ${details.username}`);
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById("logout").style.display = "flex";
-                document.getElementById('accommodation-search').style.display = 'flex';
-                document.getElementById("map").style.display = "flex";
-
-                const node = document.createElement("p");
-                const loginText = document.createTextNode(`Logged in as ${details.username}`);
-
-                node.appendChild(loginText);
-                document.getElementById("session-result").appendChild(node);
             }
     
         } catch (e) {
@@ -146,11 +134,7 @@ function App() {
     
             if(res.status == 200) {
                 alert("You have been logged out");
-                document.getElementById("login-form").style.display = "block";
-                document.getElementById("logout").style.display = "none";
-                document.getElementById("accommodation-search").style.display = "none";
-                document.getElementById("results").style.display = "none";
-                document.getElementById("map").style.display = "none";
+                setLogin(null);
             }
     
         } catch (e) {
