@@ -8,7 +8,7 @@ function LocationSearch({searchResult}) {
     }
 
     return (
-        <div className="wrapper">
+        <div className="wrapper" id="searcher">
             <h1>Accommodation Search</h1>
             <div className="input-box">
                 <input type="text" id="location" placeholder="Enter Location" />

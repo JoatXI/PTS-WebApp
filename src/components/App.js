@@ -4,6 +4,7 @@ import LocationSearch  from "./LocationSearch";
 import LeafletMap from "./Map";
 import Logout from "./Logout";
 import Login from "./Login";
+import './App.css';
 
 function App() {
     const [location, setLocation] = React.useState([]);

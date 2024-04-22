@@ -11,18 +11,20 @@ function Login({loginResult}) {
     }
 
     return (
-        <div className="wrapper">
-            <form method="post">
-                <h1>Login</h1>
-                <div className="input-box">
-                    <input type="text" id="username" placeholder="Username" required />
-                </div>
-                <div className="input-box">
-                    <input type="password" id="password" placeholder="Password" required />
-                </div>
-                <button type="button" className="btn" onClick={loginSession}>Login</button>
-            </form>
-        </div>
+        <section>
+            <div className="wrapper">
+                <form method="post">
+                    <h1>Login</h1>
+                    <div className="input-box">
+                        <input type="text" id="username" placeholder="Username" required />
+                    </div>
+                    <div className="input-box">
+                        <input type="password" id="password" placeholder="Password" required />
+                    </div>
+                    <button type="button" className="btn" onClick={loginSession}>Login</button>
+                </form>
+            </div>
+        </section>
     )
 }
 
