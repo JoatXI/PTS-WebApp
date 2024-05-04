@@ -53,7 +53,7 @@ Alternatively install pm2 using: `npm install pm2` this installs pm2 in your com
 
 A JavaScript library for building user interfaces.
 
-###React DOM
+### React DOM
 
 Provides DOM-specific methods that can be used at the top level of a web app to enable React components.
 
